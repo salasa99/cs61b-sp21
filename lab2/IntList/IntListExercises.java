@@ -9,12 +9,9 @@ public class IntListExercises {
      * @param lst IntList from Lecture
      */
     public static void addConstant(IntList lst, int c) {
-        int size = lst.iterativeSize();
-        IntList head = lst;
-        while (size != 0) {
-            head.first += c;
-            head = head.rest;
-            size--;
+        while (lst != null) {
+            lst.first += c;
+            lst = lst.rest;
         }
     }
 
