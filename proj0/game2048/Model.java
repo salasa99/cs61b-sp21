@@ -1,5 +1,6 @@
 package game2048;
 
+import java.util.Collection;
 import java.util.Formatter;
 import java.util.Observable;
 
@@ -94,7 +95,7 @@ public class Model extends Observable {
         setChanged();
     }
 
-    /** Tilt the board toward SIDE. Return true iff this changes the board.
+    /** Tilt the board toward SIDE. Return true if this changes the board.
      *
      * 1. If two Tile objects are adjacent in the direction of motion and have
      *    the same value, they are merged into one Tile of twice the original
@@ -109,11 +110,89 @@ public class Model extends Observable {
     public boolean tilt(Side side) {
         boolean changed;
         changed = false;
+        int size = board.size();
 
         // TODO: Modify this.board (and perhaps this.score) to account
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
 
+        if (side != Side.NORTH) {
+            board.setViewingPerspective(side);
+        }
+
+        for (int c = 0; c < size; c++) {
+            int[] goal = {0, 1, 2, 3};
+            int[] movingEncourage = {0, 0, 0, 0};
+            int[] numInBox = {0, 0, 0, 0};
+
+            for (int r =  0; r < size; r++) {
+                if (board.tile(c, r) == null) {
+                    goal[r] = -1;
+                }
+                else
+                    numInBox[r] = 1;
+            }
+
+            for (int r = size - 2; r >= 0; r--) {
+                if (numInBox[r] == 0)
+                    continue;
+                int upperBound = r;
+                for (int i = r+1; i < size; i++) {
+                    if (numInBox[i] == 0) {
+                        upperBound = i;
+                    }
+                    else if(numInBox[i] == 1) {
+                        upperBound = i;
+                        break;
+                    }
+                    else
+                        break;
+                }
+                if (upperBound == r)
+                    continue;
+
+                for (int j = upperBound; j > r; j--) {
+                    // nothing in box j, just moving tile r to it
+                    if (numInBox[j] == 0) {
+                        goal[r] = j;
+                        numInBox[j] = 1;
+                        numInBox[r] = 0;
+                        break;
+                    }
+                    else if (numInBox[j] == 1) {
+                        int targetIndex = j;
+                        for (int k = r + 1; k <= j; k++) {
+                            if (goal[k] == j) {
+                                targetIndex = k;
+                                break;
+                            }
+                        }
+                        if (board.tile(c, r).value() == board.tile(c, targetIndex).value()) {
+                            goal[r] = j;
+                            numInBox[r] = 0;
+                            numInBox[j] = 2;
+                            movingEncourage[r] = board.tile(c, r).value() * 2;
+                            break;
+                        }
+                    }
+                    else {
+
+                    }
+                }
+            }
+            for (int i = goal.length-1; i >= 0; i--) {
+                if (goal[i] != -1 && goal[i] != i) {
+                    Tile t = board.tile(c, i);
+                    board.move(c, goal[i], t);
+                    changed = true;
+                    score += movingEncourage[i];
+                }
+            }
+        }
+
+        if (side != Side.NORTH) {
+            board.setViewingPerspective(Side.NORTH);
+        }
         checkGameOver();
         if (changed) {
             setChanged();
@@ -124,6 +203,16 @@ public class Model extends Observable {
     /** Checks if the game is over and sets the gameOver variable
      *  appropriately.
      */
+    private int count(int[] list, int target) {
+        int count = 0;
+        for (int i = 0; i < list.length; i++) {
+            if (list[i] == target) {
+                count++;
+            }
+        }
+        return count;
+    }
+
     private void checkGameOver() {
         gameOver = checkGameOver(board);
     }
@@ -138,6 +227,13 @@ public class Model extends Observable {
      * */
     public static boolean emptySpaceExists(Board b) {
         // TODO: Fill in this function.
+        int size = b.size();
+        for (int c = 0; c < size; c++) {
+            for (int r = 0; r < size; r++) {
+                if(b.tile(c, r) == null)
+                    return true;
+            }
+        }
         return false;
     }
 
@@ -147,7 +243,17 @@ public class Model extends Observable {
      * given a Tile object t, we get its value with t.value().
      */
     public static boolean maxTileExists(Board b) {
-        // TODO: Fill in this function.
+        // TODO: Fill in this function.\
+        int size = b.size();
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if (b.tile(i, j) == null) {
+                    continue;
+                }
+                if (b.tile(i, j).value() == MAX_PIECE)
+                    return true;
+            }
+        }
         return false;
     }
 
@@ -159,7 +265,25 @@ public class Model extends Observable {
      */
     public static boolean atLeastOneMoveExists(Board b) {
         // TODO: Fill in this function.
-        return false;
+        int size = b.size();
+        if(emptySpaceExists(b))
+            return true;
+       for (int c = 0; c < size; c++) {
+           for (int r = 0; r < size; r++) {
+               Tile t = b.tile(c, r);
+               int rightOne = c + 1;
+               int aboveOne = r + 1;
+               if (rightOne < size) {
+                   if (t.value() == b.tile(rightOne, r).value())
+                       return true;
+               }
+               if (aboveOne < size) {
+                   if (t.value() == b.tile(c, aboveOne).value())
+                       return true;
+               }
+           }
+       }
+       return false;
     }
 
 
