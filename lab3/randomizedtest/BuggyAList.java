@@ -1,5 +1,8 @@
 package randomizedtest;
 
+import org.junit.Test;
+import timingtest.AList;
+
 /** Array based list.
  *  @author Josh Hug
  */
@@ -67,4 +70,5 @@ public class BuggyAList<Item> {
         size = size - 1;
         return x;
     }
+
 }
