@@ -1,6 +1,7 @@
 package randomizedtest;
 
 import edu.princeton.cs.algs4.StdRandom;
+import org.junit.Assert;
 import org.junit.Test;
 import timingtest.AList;
 
@@ -30,33 +31,31 @@ public class TestBuggyAList {
 
     @Test
     public void randomizedTest() {
+        BuggyAList<Integer> test = new BuggyAList<>();
         AListNoResizing<Integer> L = new AListNoResizing<>();
-        BuggyAList<Integer> B = new BuggyAList<>();
 
-        int N = 500;
+        int N = 5000;
         for (int i = 0; i < N; i += 1) {
             int operationNumber = StdRandom.uniform(0, 3);
+
             if (operationNumber == 0) {
-                // addLast
                 int randVal = StdRandom.uniform(0, 100);
                 L.addLast(randVal);
-                B.addLast(randVal);
-                assertEquals(L.size(), B.size());
+                test.addLast(randVal);
+                Assert.assertEquals(test.size(), L.size());
             } else if (operationNumber == 1) {
-                // size
-                if (L.size() == 0) {
+                if (L.size() == 0)
                     continue;
-                }
-                int RemoveLastL = L.removeLast();
-                int RemoveLastB = B.removeLast();
-                assertEquals(RemoveLastB, RemoveLastL);
-            } else if (operationNumber == 2) {
-                if (L.size() == 0) {
+                int last1 = test.getLast();
+                int last2 = L.getLast();
+                Assert.assertEquals(last1, last2);
+            }
+            else if (operationNumber == 2) {
+                if (L.size() == 0)
                     continue;
-                }
-                int LastOfL = L.getLast();
-                int LastOfB = B.getLast();
-                assertEquals(LastOfL, LastOfB);
+                int removed1 = test.removeLast();
+                int removed2 = L.removeLast();
+                Assert.assertEquals(removed1, removed2);
             }
         }
     }
