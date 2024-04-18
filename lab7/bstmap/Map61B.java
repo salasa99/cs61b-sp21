@@ -1,5 +1,7 @@
 package bstmap;
 
+import javax.swing.text.html.HTMLDocument;
+
 import java.util.Set;
 
 /* Your implementation BSTMap should implement this interface. To do so,
