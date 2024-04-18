@@ -64,7 +64,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V>{
         }
     }
 
-    public int size(Node node) {
+    private int size(Node node) {
         if (node == null)
             return 0;
         else
@@ -98,6 +98,9 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V>{
         }
         return node;
     }
+
+    public void printInOrder() {
+    };
 
     /* Returns a Set view of the keys contained in this map. Not required for Lab 7.
      * If you don't implement this, throw an UnsupportedOperationException. */
