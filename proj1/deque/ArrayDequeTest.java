@@ -2,6 +2,9 @@ package deque;
 
 import edu.princeton.cs.algs4.StdRandom;
 import org.junit.Test;
+
+import java.util.Iterator;
+
 import static org.junit.Assert.*;
 
 
@@ -128,7 +131,7 @@ public class ArrayDequeTest {
     }
 
     @Test
-    public void randomGet() {
+    public void randomGetTest() {
         ArrayDeque<Integer> lld1 = new ArrayDeque<>();
         for (int i = 0; i < 10000; i++) {
             lld1.addLast(i);
@@ -138,5 +141,29 @@ public class ArrayDequeTest {
             int result = lld1.get(idx);
             assertEquals("Should have same value", idx, result);
         }
+    }
+
+    @Test
+    public void iteratorTest() {
+        ArrayDeque<Integer> lld1 = new ArrayDeque<>();
+        for (int i = 0; i < 10; i++) {
+            lld1.addLast(i);
+            lld1.addFirst(10*i);
+        }
+        Iterator<Integer> iter = lld1.iterator();
+        while(iter.hasNext()) {
+            System.out.println(iter.next());
+        }
+    }
+
+    @Test
+    public void equalsTest() {
+        ArrayDeque<Integer> ad1 = new ArrayDeque<>();
+        ArrayDeque<Integer> ad2 = new ArrayDeque<>();
+        for (int i = 0; i < 100; i++) {
+            ad1.addFirst(i);
+            ad2.addFirst(i);
+        }
+        assertTrue(ad1.equals(ad2));
     }
 }
