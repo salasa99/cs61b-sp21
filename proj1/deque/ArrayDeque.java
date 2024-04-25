@@ -96,14 +96,14 @@ public class ArrayDeque<T> implements Deque<T> {
     private class ArrayDequeIterator implements Iterator<T> {
         private int wizPos;
         ArrayDequeIterator() {
-            wizPos = head;
+            wizPos = 0;
         }
         public boolean hasNext() {
-            return wizPos != tail;
+            return wizPos < size;
         }
         public T next() {
-            T returnItem = items[wizPos];
-            wizPos = (wizPos + 1) % items.length;
+            T returnItem = items[(head + wizPos) % items.length];
+            wizPos++;
             return returnItem;
         }
     }
@@ -150,21 +150,24 @@ public class ArrayDeque<T> implements Deque<T> {
     */
     @Override
     public boolean equals(Object o) {
+
         if (o == null) {
             return false;
         }
-        if (o == this) {
+        if (this == o) {
             return true;
         }
-        if (!(o instanceof ArrayDeque)) {
+
+        if (!(o instanceof Deque)) {
+            return  false;
+        }
+        Deque<T> other = (Deque<T>) o;
+        if (this.size() != other.size()) {
             return false;
         }
-        ArrayDeque<?> ad = (ArrayDeque<?>) o;
-        if (ad.size() != size) {
-            return false;
-        }
-        for (int i = 0; i < size; i++) {
-            if (ad.get(i) != get(i)) {
+
+        for (int i = 0; i < size(); i++) {
+            if (!other.get(i).equals(this.get(i))) {//这里记得考虑嵌套数组的情况不能使用==来判定相等
                 return false;
             }
         }

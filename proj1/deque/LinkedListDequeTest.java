@@ -1,6 +1,9 @@
 package deque;
 
 import org.junit.Test;
+
+import java.util.Random;
+
 import static org.junit.Assert.*;
 
 
@@ -129,7 +132,7 @@ public class LinkedListDequeTest {
     public void equalsTest() {
         Deque<Integer> lld1 = new LinkedListDeque<>();
         Deque<Integer> ad2 = new ArrayDeque<>();
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 1000; i++) {
             lld1.addLast(i);
             ad2.addLast(i);
         }
