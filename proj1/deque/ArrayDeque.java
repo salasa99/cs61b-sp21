@@ -167,7 +167,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         }
 
         for (int i = 0; i < size(); i++) {
-            if (!other.get(i).equals(this.get(i))) {//这里记得考虑嵌套数组的情况不能使用==来判定相等
+            if (!other.get(i).equals(this.get(i))) {
                 return false;
             }
         }
