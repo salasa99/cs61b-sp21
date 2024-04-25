@@ -30,6 +30,7 @@ public class ArrayDeque<T> implements Deque<T> {
         head = 0;
         tail = size;
     }
+    @Override
     public void addFirst(T item) {
         if (size == items.length) {
             resize(2 * size);
@@ -37,6 +38,7 @@ public class ArrayDeque<T> implements Deque<T> {
         items[head = (head - 1) & (items.length - 1)] = item;
         size++;
     }
+    @Override
     public void addLast(T item) {
         if (size == items.length) {
             resize(2 * size);
@@ -45,12 +47,11 @@ public class ArrayDeque<T> implements Deque<T> {
         tail = (tail + 1) % items.length;
         size++;
     }
-    public boolean isEmpty() {
-        return size == 0;
-    }
+    @Override
     public int size() {
         return size;
     }
+    @Override
     public void printDeque() {
         for (int i = head; i < size; i++) {
             System.out.println(items[i] + " ");
@@ -60,6 +61,7 @@ public class ArrayDeque<T> implements Deque<T> {
         }
         System.out.println();
     }
+    @Override
     public T removeFirst() {
         if (isEmpty()) {
             return null;
@@ -68,10 +70,11 @@ public class ArrayDeque<T> implements Deque<T> {
         head = (head + 1) % items.length;
         size--;
         if (size < items.length / 4 && size >= 16) {
-            resize(items.length / 2);
+            resize(items.length / 4);
         }
         return x;
     }
+    @Override
     public T removeLast() {
         if (isEmpty()) {
             return null;
@@ -83,6 +86,7 @@ public class ArrayDeque<T> implements Deque<T> {
         }
         return x;
     }
+    @Override
     public T get(int index) {
         if (index >= size) {
             return null;
@@ -91,8 +95,12 @@ public class ArrayDeque<T> implements Deque<T> {
     }
     private class ArrayDequeIterator implements Iterator<T> {
         private int wizPos;
-        public ArrayDequeIterator() { wizPos = head; }
-        public boolean hasNext() { return wizPos != tail; }
+        public ArrayDequeIterator() {
+            wizPos = head;
+        }
+        public boolean hasNext() {
+            return wizPos != tail;
+        }
         public T next() {
             T returnItem = items[wizPos];
             wizPos = (wizPos + 1) % items.length;
@@ -102,21 +110,21 @@ public class ArrayDeque<T> implements Deque<T> {
     public Iterator<T> iterator() {
         return new ArrayDequeIterator();
     }
+    @Override
     public boolean equals(Object o) {
         if (o == null) {
             return false;
-        }
-        if (this.getClass() != o.getClass()) {
+        } else if (!(o instanceof Deque<?>)) {
             return false;
         }
-        ArrayDeque<T> other = (ArrayDeque<T>) o;
+        Deque<T> other = (Deque<T>) o;
         if (this.size() != other.size()) {
             return false;
         }
 
         Iterator<T> thisIter = this.iterator();
         Iterator<T> otherIter = other.iterator();
-        while(otherIter.hasNext() && thisIter.hasNext()) {
+        while (otherIter.hasNext() && thisIter.hasNext()) {
             if (otherIter.next() != thisIter.next()) {
                 return false;
             }
