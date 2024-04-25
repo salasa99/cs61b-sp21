@@ -2,7 +2,7 @@ package deque;
 
 import java.util.Iterator;
 
-public class LinkedListDeque<T> implements Iterable<T> {
+public class LinkedListDeque<T> implements Deque<T> {
     public LinkedListDeque() {
         sentinel = new Node(null, null, null);
     }
@@ -52,8 +52,9 @@ public class LinkedListDeque<T> implements Iterable<T> {
 
     public T removeLast() {
         T x;
-        if (size == 0)
+        if (size == 0) {
             return null;
+        }
         else if (size == 1) {
             x = sentinel.next.item;
             sentinel.next = null;
@@ -88,14 +89,12 @@ public class LinkedListDeque<T> implements Iterable<T> {
         return x;
     }
     public boolean isEmpty() {
-        if (size == 0) {
-            return true;
-        }
-        return false;
+        return size == 0;
     }
     public T get(int index) {
-        if (index >= size)
+        if (index >= size) {
             return null;
+        }
         int count = 0;
         Node p = sentinel.next;
         while (p.next != null) {
@@ -107,13 +106,15 @@ public class LinkedListDeque<T> implements Iterable<T> {
         return p.item;
     }
     public T getRecursive(int index) {
-        if (size <= index)
+        if (size <= index) {
             return null;
+        }
         return get(sentinel.next, index).item;
     }
     private Node get(Node p, int index) {
-        if (p.next == null || index == 0)
+        if (p.next == null || index == 0) {
             return p;
+        }
         return get(p.next, --index);
     }
     public void printDeque() {
@@ -138,18 +139,24 @@ public class LinkedListDeque<T> implements Iterable<T> {
         return new LinkedListDequeIterator();
     }
     public boolean equals(Object o) {
-        if (o == null) return false;
-        if (this.getClass() != o.getClass()) return false;
+        if (o == null) {
+            return false;
+        }
+        if (this.getClass() != o.getClass()) {
+            return false;
+        }
         LinkedListDeque<T> other = (LinkedListDeque<T>) o;
-        if (this.size() != other.size()) return false;
+        if (this.size() != other.size()) {
+            return false;
+        }
 
         Iterator<T> thisIter = this.iterator();
         Iterator<T> otherIter = other.iterator();
         while(otherIter.hasNext() && thisIter.hasNext()) {
-            if (otherIter.next() != thisIter.next())
+            if (otherIter.next() != thisIter.next()) {
                 return false;
+            }
         }
         return true;
     }
-
 }
