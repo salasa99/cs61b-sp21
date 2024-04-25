@@ -2,19 +2,19 @@ package deque;
 
 import java.util.Iterator;
 
-public class LinkedListDeque<T> implements Deque<T> {
+public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
     public LinkedListDeque() {
         sentinel = new Node(null, null, null);
     }
     private class Node {
         private Node prev, next;
         private T item;
-        public Node() {
+        Node() {
             this.prev = this;
             this.next = this;
             this.item = null;
         }
-        public Node(Node prev, Node next, T item) {
+        Node(Node prev, Node next, T item) {
             this.prev = prev;
             this.next = next;
             this.item = item;
@@ -126,8 +126,12 @@ public class LinkedListDeque<T> implements Deque<T> {
     }
     private class LinkedListDequeIterator implements Iterator<T> {
         private int wizPos;
-        public LinkedListDequeIterator() { wizPos = 0; }
-        public boolean hasNext() { return wizPos < size; }
+        LinkedListDequeIterator() {
+            wizPos = 0;
+        }
+        public boolean hasNext() {
+            return wizPos < size;
+        }
         public T next() {
             T returnItem = get(wizPos);
             wizPos++;
@@ -137,6 +141,7 @@ public class LinkedListDeque<T> implements Deque<T> {
     public Iterator<T> iterator() {
         return new LinkedListDequeIterator();
     }
+    /*
     @Override
     public boolean equals(Object o) {
         if (o == null) {
@@ -151,7 +156,7 @@ public class LinkedListDeque<T> implements Deque<T> {
             }
             Iterator<T> thisIter = this.iterator();
             Iterator<T> otherIter = other.iterator();
-            while(otherIter.hasNext() && thisIter.hasNext()) {
+            while (otherIter.hasNext() && thisIter.hasNext()) {
                 if (otherIter.next() != thisIter.next()) {
                     return false;
                 }
@@ -163,13 +168,36 @@ public class LinkedListDeque<T> implements Deque<T> {
             }
             Iterator<T> thisIter = this.iterator();
             Iterator<T> otherIter = other.iterator();
-            while(otherIter.hasNext() && thisIter.hasNext()) {
+            while (otherIter.hasNext() && thisIter.hasNext()) {
                 if (otherIter.next() != thisIter.next()) {
                     return false;
                 }
             }
         } else {
             return false;
+        }
+        return true;
+    }
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) {
+            return false;
+        }
+        if (o == this) {
+            return true;
+        }
+        if (!(o instanceof LinkedListDeque)) {
+            return false;
+        }
+        LinkedListDeque<?> ld = (LinkedListDeque<?>) o;
+        if (ld.size() != size) {
+            return false;
+        }
+        for (int i = 0; i < size; i++) {
+            if (ld.get(i) != get(i)) {
+                return false;
+            }
         }
         return true;
     }
