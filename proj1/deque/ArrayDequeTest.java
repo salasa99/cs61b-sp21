@@ -166,4 +166,16 @@ public class ArrayDequeTest {
         }
         assertTrue(ad1.equals(ad2));
     }
+
+    @Test
+    public void testResizeDown() {
+        ArrayDeque<Integer> ad = new ArrayDeque<>();
+        for (int i = 0; i < 64; i++) {
+            ad.addLast(i);
+        }
+        for (int i = 0; i < 60; i++) {
+            ad.removeFirst();
+        }
+        assertEquals(4, ad.size());
+    }
 }
