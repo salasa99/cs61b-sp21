@@ -2,7 +2,7 @@ package deque;
 
 import java.util.Iterator;
 
-public class ArrayDeque<T> implements Deque<T> {
+public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     private T[] items;
     private int initlCap = 8;
     private int size;
@@ -69,7 +69,7 @@ public class ArrayDeque<T> implements Deque<T> {
         T x = items[head];
         head = (head + 1) % items.length;
         size--;
-        if (size < items.length / 4 && size >= 16) {
+        if (size < items.length / 4 && size >= 8) {
             resize(items.length / 4);
         }
         return x;
